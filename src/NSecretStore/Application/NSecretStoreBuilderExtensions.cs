@@ -1,6 +1,7 @@
 ﻿using System;
 using NSecretStore;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.AspNetCore.Builder
 {
     public static class NSecretStoreBuilderExtensions
