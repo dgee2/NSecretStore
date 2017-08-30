@@ -1,37 +1,44 @@
 using System.Collections.Generic;
-using Xunit;
-using Ploeh.AutoFixture.Xunit2;
+using NUnit.Framework;
+using Ploeh.AutoFixture;
 
 namespace NSecretStore.InMemory.Tests
 {
     public class InMemorySecretStoreTests
     {
-        public InMemorySecretStore Sut { get; } = new InMemorySecretStore();
+        private InMemorySecretStore Sut { get; } = new InMemorySecretStore();
+        private Fixture Fixture { get; } = new Fixture();
 
-        [Theory, AutoData]
-        public void GetSecret_Should_Throw_KeyNotFoundException_When_Key_Not_Set(string key)
+        [Test]
+        public void GetSecret_Should_Throw_KeyNotFoundException_When_Key_Not_Set()
         {
+            var key = Fixture.Create<string>();
             Assert.Throws<KeyNotFoundException>(() => Sut.GetSecret(key));
         }
 
-        [Theory, AutoData]
-        public void GetSecret_Should_Return_Value_When_Set_By_SetSecret(string key, string value)
+        [Test]
+        public void GetSecret_Should_Return_Value_When_Set_By_SetSecret()
         {
+            var key = Fixture.Create<string>();
+            var value = Fixture.Create<string>();
             Sut.SetSecret(key, value);
-            Assert.Equal(value, Sut.GetSecret(key));
+            Assert.AreEqual(value, Sut.GetSecret(key));
         }
 
-        [Theory, AutoData]
-        public void GetSecret_Should_Throw_KeyNotFoundException_When_Key_Deleted(string key,string value)
+        [Test]
+        public void GetSecret_Should_Throw_KeyNotFoundException_When_Key_Deleted()
         {
+            var key = Fixture.Create<string>();
+            var value = Fixture.Create<string>();
             Sut.SetSecret(key, value);
             Sut.DeleteSecret(key);
             Assert.Throws<KeyNotFoundException>(() => Sut.GetSecret(key));
         }
 
-        [Theory,AutoData]
-        public void DeleteSecret_Should_Throw_KeyNotFoundException_When_Key_Not_Set(string key)
+        [Test]
+        public void DeleteSecret_Should_Throw_KeyNotFoundException_When_Key_Not_Set()
         {
+            var key = Fixture.Create<string>();
             Assert.Throws<KeyNotFoundException>(() => Sut.DeleteSecret(key));
         }
     }
